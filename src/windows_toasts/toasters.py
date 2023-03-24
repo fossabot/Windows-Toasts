@@ -122,6 +122,11 @@ class BaseWindowsToaster:
             toastContent.SetScenario(toast.scenario)
 
         toastContent.SetAttribute(toastContent.GetElementByTagName("toast"), "launch", toast.tag)
+        if toast.on_activated is not None and not callable(toast.on_activated):
+            toastElement = toastContent.GetElementByTagName("toast")
+            toastContent.SetAttribute(toastElement, "activationType", "protocol")
+            toastContent.SetAttribute(toastElement, "launch", toast.on_activated)
+
         return toastContent
 
     def show_toast(self, toast: Toast) -> None:
@@ -134,7 +139,7 @@ class BaseWindowsToaster:
         toastNotification = ToastNotification(self._setup_toast(toast, True).xmlDocument)
         toastNotification.data = _build_adaptable_data(toast)
 
-        if toast.on_activated is not None:  # pragma: no cover
+        if toast.on_activated is not None and callable(toast.on_activated):  # pragma: no cover
             # For some reason on_activated's type is generic, so cast it
             toastNotification.add_activated(
                 lambda _, eventArgs: toast.on_activated(ToastActivatedEventArgs.fromWinRt(eventArgs))

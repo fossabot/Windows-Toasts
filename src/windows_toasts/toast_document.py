@@ -260,7 +260,6 @@ class ToastDocument:
         actionNode = self.xmlDocument.create_element("action")
         self.SetAttribute(actionNode, "content", action.content)
         self.SetAttribute(actionNode, "arguments", action.arguments)
-        self.SetAttribute(actionNode, "activationType", "background")
 
         if action.image is not None:
             self.SetAttribute(actionNode, "imageUri", action.image.path)

@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import copy
 import datetime
+import os
 import uuid
 import warnings
-from typing import Callable, ClassVar, Iterable, List, Literal, Optional, TypeVar
+from typing import Callable, ClassVar, Iterable, List, Literal, Optional, TypeVar, Union
 
 from winsdk.windows.ui.notifications import ToastDismissedEventArgs, ToastFailedEventArgs, ToastTemplateType
 
@@ -84,7 +85,7 @@ class Toast:
         group: Optional[str] = None,
         expiration_time: Optional[datetime.datetime] = None,
         suppress_popup: bool = False,
-        on_activated: Optional[Callable[[ToastActivatedEventArgs], None]] = None,
+        on_activated: Union[Optional[Callable[[ToastActivatedEventArgs], None]], os.PathLike] = None,
         on_dismissed: Optional[Callable[[ToastDismissedEventArgs], None]] = None,
         on_failed: Optional[Callable[[ToastFailedEventArgs], None]] = None,
     ) -> None:
@@ -123,7 +124,7 @@ class Toast:
         :type suppress_popup: bool
         :param on_activated: Callable to execute when the toast is clicked if basic, or a button is clicked if \
          interactable
-        :type on_activated: Optional[Callable[[ToastActivatedEventArgs], None]]
+        :type on_activated: Union[Optional[Callable[[ToastActivatedEventArgs], None]], os.PathLike]
         :param on_dismissed: Callable to execute when the toast is dismissed (X is clicked or times out) if interactable
         :type on_dismissed: Optional[Callable[[ToastDismissedEventArgs], None]]
         :param on_failed: Callable to execute when the toast fails to display
